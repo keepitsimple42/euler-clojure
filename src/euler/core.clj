@@ -16,7 +16,7 @@
 
 ;problem 2
 (def lazy-fib
-  (map first (iterate (fn [[a b]] [b (+ a b)] ) [1 1])))
+  (map first (iterate (fn [[a b]] [b (+' a b)] ) [1 1])))
 
 ;(take 10 lazy-fib)
 
@@ -109,6 +109,37 @@
 ;problem 7
 
 (last (take 10001 (gen-primes)))
+
+
+
+;finding factors - seems infeasibly fast
+
+(defn factors [n]
+  (into (sorted-set)
+        (reduce concat
+                (for [x (range 1 (inc (Math/sqrt n))) :when (zero? (rem n x))]
+                  [x (/ n x)]))))
+
+
+
+;prime factors
+
+(defn prime-factors
+"Return a list of factors of N."
+([n]
+ (prime-factors n 2 ()))
+([n k acc]
+ (if (= 1 n)
+   acc
+   (if (= 0 (rem n k))
+     (recur (quot n k) k (cons k acc))
+             (recur n (inc k) acc)))))
+
+(prime-factors 6000120004)
+
+(prime-factors(reduce * (take 15 (gen-primes))))
+
+
 
 
 
